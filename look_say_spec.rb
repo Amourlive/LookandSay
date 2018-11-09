@@ -18,13 +18,15 @@ describe LookSay do
   end
 
   describe '#next' do
-    it 'return 1' do
+    it 'return next value' do
       expect(sequence.next).to eq(1)
+      expect(sequence.next).to eq(11)
+      expect(sequence.next).to eq(21)
     end
   end
 
   describe '#take' do
-    it 'return array with Look Say item of sequence' do
+    it 'return array with item of sequence' do
       expect(sequence.take(10)).to eq(reference)
     end
   end
