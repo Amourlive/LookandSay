@@ -8,7 +8,7 @@ class LookSay
         yielder << accumulator.join.to_i
         accumulator = next_value(accumulator)
       end
-    end.lazy
+    end
   end
 
   def next
@@ -19,11 +19,21 @@ class LookSay
     @results_array.rewind
   end
 
-  def each(&block)
-    @results_array.each(&block)
+  def value_at(key)
+    accumulator = [1]
+    key.times do
+      accumulator = next_value(accumulator)
+    end
+    accumulator.join.to_i
   end
 
   private
+
+  # Transferred to private methods to avoid infinite iteration
+  # need to work Enumarable module
+  def each(&block)
+    @results_array.each(&block)
+  end
 
   def next_value(last_value, tmp = [], count = 1)
     last_value.push(0).inject do |previous_val, next_val|
@@ -39,3 +49,10 @@ class LookSay
   end
   # last_value is accumulator in previous scope
 end
+
+############### usage example ##################
+# seq = LookSay.new
+# seq.first(10).each do |val|
+#   p val
+# end
+# p seq.lazy.find_all { |value| value.to_s.size.even? }.first(10)
