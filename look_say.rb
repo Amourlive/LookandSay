@@ -1,16 +1,22 @@
 # LookSay sequence
 class LookSay
   include Enumerable
-  LENGTH = 1
   def initialize
-    @accumulator = [1]
-    @results_array = Enumerator::Lazy.new(1..Float::INFINITY) do |yielder, val|
-      yielder << (val == 1 ? val : next_value(@accumulator).join.to_i)
-    end
+    @results_array = Enumerator.new do |yielder|
+      accumulator = [1]
+      loop do
+        yielder << accumulator.join.to_i
+        accumulator = next_value(accumulator)
+      end
+    end.lazy
   end
 
   def next
     @results_array.next
+  end
+
+  def rewind
+    @results_array.rewind
   end
 
   def each(&block)
@@ -29,7 +35,7 @@ class LookSay
       end
       next_val
     end
-    @accumulator = tmp
+    tmp
   end
-  # last_value is @accumulator in previous scope
+  # last_value is accumulator in previous scope
 end
